@@ -1,0 +1,36 @@
+netty:
+  port1: 13145
+  port2: 54131
+  action: '/root/jks/keystore.jks'
+  password: '123456'
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: ifeng@126.com
+  data:
+    mongodb:
+      #uri: mongodb://192.168.0.7:30001/pzb_app_phone
+      uri: mongodb://mytest:mytest@mongo1:30002,mongo2:30002,mongo3:30002/pzb_app_phone?replicaSet=replSet&readPreference=secondaryPreferred&connectTimeoutMS=300000
+      #uri: mongodb://mytest:mytest@192.168.0.4:30002,192.168.0.6:30002,10.80.220.46:30002/mytest
+      #uri: mongodb://mytest:mytest@192.168.1.241:27017,192.168.1.123:27017,192.168.1.200:27017/mytest
+      option:
+        min-connection-per-host: 5
+        max-connection-per-host: 100
+        threads-allowed-to-block-for-connection-multiplier: 20
+        server-selection-timeout: 30000
+        max-wait-time: 120000
+        max-connection-idle-time: 0
+        max-connection-life-time: 0
+        connect-timeout: 10000
+        socket-timeout: 0
+        socket-keep-alive: false
+        ssl-enabled: false
+        ssl-invalid-host-name-allowed: false
+        always-use-m-beans: false
+        heartbeat-socket-timeout: 20000
+        heartbeat-connect-timeout: 20000
+        min-heartbeat-frequency: 500
+        heartbeat-frequency: 10000
+        local-threshold: 15
+      authentication-database: admin
