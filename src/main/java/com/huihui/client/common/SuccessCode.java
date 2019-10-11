@@ -17,7 +17,9 @@ public enum  SuccessCode {
 
     SUCCESS_DELETE(20004,"消息删除成功"),
 
-    SUCCESS_HEARD(20005,"心跳处理ok")
+    SUCCESS_HEARD(20005,"心跳处理ok"),
+
+    SUCCESS_LOGIN(20006,"用户登录成功")
     ;
 
 

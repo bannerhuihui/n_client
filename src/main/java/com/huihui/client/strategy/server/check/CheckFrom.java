@@ -1,6 +1,7 @@
 package com.huihui.client.strategy.server.check;
 
-import com.huihui.client.pojo.ReqMessage;
+import com.huihui.client.pojo.ReadMessage;
+import com.huihui.client.pojo.ReturnMessage;
 
 /**
  * @className: CheckFrom
@@ -11,7 +12,7 @@ import com.huihui.client.pojo.ReqMessage;
  */
 public abstract class CheckFrom  {
 
-    boolean checkFrom(ReqMessage reqMessage){
+    public boolean checkFrom(ReadMessage readMessage){
         return false;
     }
 }

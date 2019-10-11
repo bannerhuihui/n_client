@@ -1,7 +1,7 @@
 package com.huihui.client.server;
 
-import com.alibaba.fastjson.JSONObject;
 import com.huihui.client.server.util.SslUtil;
+import com.huihui.client.util.ClientUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -14,9 +14,7 @@ import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshakerFactory;
-import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketClientCompressionHandler;
 import io.netty.handler.codec.string.StringDecoder;
@@ -31,7 +29,6 @@ import org.springframework.stereotype.Component;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import java.net.*;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -42,10 +39,10 @@ import java.util.concurrent.TimeUnit;
  * @Veriosn 1.0
  **/
 @Component
-public class NettyClientServer {
+public class NettyClientServer implements Runnable {
 
 
-    private static Channel CHANNEL = null;
+    public static Channel CHANNEL = null;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyClientServer.class);
 
@@ -62,6 +59,7 @@ public class NettyClientServer {
     /**
      * 需要执行的连接方法
      */
+    @Autowired
     public void run() {
         LOGGER.info("监听进入到netty启动程序！");
         URI uri = null;
@@ -79,11 +77,11 @@ public class NettyClientServer {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            SSLContext sslContext = SslUtil.createSSLContext(type,path,password);
+                            SSLContext sslContext = SslUtil.createSSLContext(type, path, password);
                             SSLEngine engine = sslContext.createSSLEngine();
                             engine.setUseClientMode(true);
                             ChannelPipeline p = ch.pipeline();
-                            p.addLast(new IdleStateHandler(30,30,30, TimeUnit.MINUTES));
+                            p.addLast(new IdleStateHandler(1, 1, 1, TimeUnit.MINUTES));
                             p.addLast(new SslHandler(engine));
                             p.addLast(new HttpClientCodec());
                             p.addLast(new HttpObjectAggregator(8192));
@@ -94,13 +92,14 @@ public class NettyClientServer {
                         }
                     });
             try {
-                Channel ch = bootstrap.connect(uri.getHost(),13145).sync().channel();
+                Channel ch = bootstrap.connect(uri.getHost(), 13145).sync().channel();
                 handler.handshakeFuture().sync();
-                //连接成功后发送消息到服务端进行注册
                 CHANNEL = ch;
-                System.out.println(ch == null);
+                //连接成功后发送消息到服务端进行注册
+                boolean login = ClientUtil.login();
+                LOGGER.info("NettyClientServer#run建立连接后登录" + (login ? "成功！" : "失败！"));
             } catch (Exception e) {
-                LOGGER.error("连接服务器异常！",e);
+                LOGGER.error("连接服务器异常！", e);
                 e.fillInStackTrace();
             }
         }

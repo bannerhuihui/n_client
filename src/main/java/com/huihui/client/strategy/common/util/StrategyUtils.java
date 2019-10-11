@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public class StrategyUtils {
 
-    private static final String _CLAZZ_TITLE = "com.huihui.netty.strategy.server.";
+    private static final String _CLAZZ_TITLE = "com.huihui.client.strategy.server.";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StrategyUtils.class);
 

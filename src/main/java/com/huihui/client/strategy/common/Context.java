@@ -1,6 +1,6 @@
 package com.huihui.client.strategy.common;
 
-import com.huihui.client.pojo.ReqMessage;
+import com.huihui.client.pojo.ReadMessage;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
@@ -26,7 +26,7 @@ public class Context {
     }
 
     //根据策略类返回结果
-    public void result(ReqMessage message, ChannelHandlerContext ctx){
+    public void result(ReadMessage message, ChannelHandlerContext ctx){
         handlerStrategy.messageHandle(message,ctx);
     }
 

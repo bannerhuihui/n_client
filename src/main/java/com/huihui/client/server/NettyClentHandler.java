@@ -1,10 +1,14 @@
 package com.huihui.client.server;
 
 import com.alibaba.fastjson.JSONObject;
-import com.huihui.client.pojo.ReqMessage;
+import com.huihui.client.common.ProConfig;
+import com.huihui.client.common.ProFunctionName;
+import com.huihui.client.pojo.ReadMessage;
+import com.huihui.client.pojo.ReturnMessage;
 import com.huihui.client.strategy.common.Context;
 import com.huihui.client.strategy.common.HandlerFactory;
 import com.huihui.client.strategy.common.HandlerStrategy;
+import com.huihui.client.util.ClientUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
@@ -84,10 +88,11 @@ public class NettyClentHandler extends SimpleChannelInboundHandler<Object> {
         WebSocketFrame frame = (WebSocketFrame) msg;
         if (frame instanceof TextWebSocketFrame) {
             TextWebSocketFrame textFrame = (TextWebSocketFrame) frame;
-            ReqMessage message = null;
+            ReadMessage message = null;
             if(textFrame!=null){
                 try{
-                    message = JSONObject.parseObject(((TextWebSocketFrame) msg).text(), ReqMessage.class);
+                    message = JSONObject.parseObject(((TextWebSocketFrame) msg).text(), ReadMessage.class);
+                    LOGGER.info("NettyServerHandler#channelRead0收到服务器请求，参数为："+ JSONObject.toJSONString(message));
                 }catch (Exception e){
                     LOGGER.error("NettyServerHandler#channelRead0消息解析异常！",e);
                 }
@@ -125,7 +130,12 @@ public class NettyClentHandler extends SimpleChannelInboundHandler<Object> {
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         LOGGER.info("{} -> [客户端心跳监测发送] 通道编号：{}", this.getClass().getName(), ctx.channel().id());
         if (evt instanceof IdleStateEvent) {
-            ctx.writeAndFlush(new TextWebSocketFrame("ping-pong-ping-pong"));
+            ReturnMessage returnMessage = new ReturnMessage();
+            returnMessage.setFrom(ProConfig.CLIENT_NAME.getCode());
+            returnMessage.setType(ProFunctionName.HEARD.getCode());
+            returnMessage.setContentType(ProFunctionName.JAVA_CLIENT_HEARD_CONTENT_TYPE.getCode());
+            returnMessage.setContent(ProConfig.HEARD_CONTENT.getCode());
+            ClientUtil.saveMessage(returnMessage,ProFunctionName.HEARD.getMessage());
         } else {
             super.userEventTriggered(ctx, evt);
         }

@@ -14,11 +14,9 @@ import com.huihui.client.strategy.common.util.StrategyUtils;
 public class HandlerFactory {
 
     String [] clazzName = {
-            "Login",
-            "QueryChatMessageTo",
-            "SaveChatMesasge",
-            "BusinessOpportunity",
-            "StressTesting"};
+            "",
+            "Login"
+            };
 
     /**
      * handler状态类

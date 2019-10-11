@@ -1,6 +1,9 @@
 package com.huihui.client.strategy.common;
 
-import com.huihui.client.pojo.ReqMessage;
+import com.huihui.client.pojo.ReadMessage;
+import com.huihui.client.pojo.ReturnMessage;
+import com.huihui.client.strategy.server.check.CheckFrom;
+import com.huihui.client.strategy.server.check.impl.CheckFromDefault;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,5 +20,13 @@ public abstract class HandlerStrategy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandlerStrategy.class);
 
-    public abstract void messageHandle(ReqMessage message, ChannelHandlerContext ctx);
+    private CheckFrom checkFrom;
+
+    public abstract void messageHandle(ReadMessage message, ChannelHandlerContext ctx);
+
+
+    public boolean checkFrom(ReadMessage message){
+        this.checkFrom = new CheckFromDefault();
+        return checkFrom.checkFrom(message);
+    }
 }

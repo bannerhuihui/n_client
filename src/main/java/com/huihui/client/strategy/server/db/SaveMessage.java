@@ -1,6 +1,7 @@
 package com.huihui.client.strategy.server.db;
 
-import com.huihui.client.pojo.ReqMessage;
+import com.huihui.client.pojo.ReadMessage;
+import com.huihui.client.pojo.ReturnMessage;
 
 /**
  * @className: SaveMessage
@@ -11,7 +12,7 @@ import com.huihui.client.pojo.ReqMessage;
  */
 public abstract class SaveMessage {
 
-    public boolean saveMessage(ReqMessage reqMessage){
-        return false;
+    public ReturnMessage saveMessage(ReadMessage readMessage){
+        return null;
     }
 }

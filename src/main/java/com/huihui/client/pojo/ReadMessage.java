@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @createDate: 2019-09-11
  * @version: 1.0
  */
-public class ReqMessage implements Serializable {
+public class ReadMessage implements Serializable {
 
     private static final long serialVersionUID = 6555319698705099485L;
 
@@ -20,6 +20,8 @@ public class ReqMessage implements Serializable {
     private int code;
 
     private int type;
+
+    private String message;
 
     public String getFrom() {
         return from;
@@ -51,5 +53,13 @@ public class ReqMessage implements Serializable {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
